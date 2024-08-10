@@ -67,18 +67,16 @@ describe('debounce', () => {
     const debouncedFn = debounce(spy, 300);
 
     debouncedFn();
-
     vi.advanceTimersByTime(200);
-    debouncedFn();
 
+    debouncedFn();
     vi.advanceTimersByTime(100);
-    debouncedFn();
 
+    debouncedFn();
     vi.advanceTimersByTime(200);
-    debouncedFn();
 
-    vi.advanceTimersByTime(300); // 유일한 0.3초 후 호출
     debouncedFn();
+    vi.advanceTimersByTime(300); // 유일한 0.3초 후 호출
 
     expect(spy).toHaveBeenCalledTimes(1);
   });
