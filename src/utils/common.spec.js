@@ -35,3 +35,51 @@ describe('pick util 단위테스트', () => {
     expect(pick(obj)).toEqual({});
   });
 });
+
+describe('debounce', () => {
+  beforeEach(() => {
+    vi.useFakeTimers(); // 타이머 모킹
+
+    // setSystemTime api를 사용하면 시간이 고정되어 일관된 환경에서 테스트 가능
+    // 필요한 경우에만 사용
+    vi.setSystemTime(new Date('2024-08-10'));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers(); // 타이머 원래대로 복구
+  });
+
+  it('특정 시간이 지난 후 함수가 호출된다', () => {
+    const spy = vi.fn();
+
+    const debouncedFn = debounce(spy, 300);
+
+    debouncedFn();
+
+    vi.advanceTimersByTime(300); // 타이머 모킹 후 0.3초 지난 것처럼 세팅
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('연이어 호출해도 마지막 호출 기준으로 지정된 타이머 시간이 지난 경우에만 함수가 호출된다.', () => {
+    const spy = vi.fn();
+
+    const debouncedFn = debounce(spy, 300);
+
+    debouncedFn();
+
+    vi.advanceTimersByTime(200);
+    debouncedFn();
+
+    vi.advanceTimersByTime(100);
+    debouncedFn();
+
+    vi.advanceTimersByTime(200);
+    debouncedFn();
+
+    vi.advanceTimersByTime(300); // 유일한 0.3초 후 호출
+    debouncedFn();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+});
