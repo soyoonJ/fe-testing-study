@@ -13,7 +13,7 @@ export default async (component, options = {}) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        // ✅ turns retries off
+        // ✅ turns retries off : 테스트 환경에서는 없애는 것이 좋음
         retry: false,
       },
     },

@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import { handlers } from '@/__mocks__/handlers';
 
 /* msw */
+// msw를 사용하여 테스트 환경에서 API 요청을 가로채서 응답을 제어할 수 있음
 export const server = setupServer(...handlers);
 
 beforeAll(() => {
@@ -11,7 +12,7 @@ beforeAll(() => {
 });
 
 afterEach(() => {
-  server.resetHandlers();
+  server.resetHandlers(); // 런타임 중에 요청하는 모든 핸들러를 초기화
   vi.clearAllMocks();
 });
 

@@ -10,12 +10,53 @@ const setMinPriceFn = vi.fn();
 const setMaxPriceFn = vi.fn();
 const setTitleFn = vi.fn();
 
-beforeEach(() => {});
+beforeEach(() => {
+  mockUseFilterStore({
+    setMinPrice: setMinPriceFn,
+    setMaxPrice: setMaxPriceFn,
+    setTitle: setTitleFn,
+  });
+});
 
-it('카테고리 목록을 가져온 후 카테고리 필드의 정보들이 올바르게 렌더링된다.', async () => {});
+it('카테고리 목록을 가져온 후 카테고리 필드의 정보들이 올바르게 렌더링된다.', async () => {
+  await render(<ProductFilter />);
 
-it('상품명을 수정하는 경우 setTitle 액션이 호출된다.', async () => {});
+  // api 완료까지 기다린 후에 확인하기 위해 findByLabelText를 사용한다.
+  expect(await screen.findByLabelText('category1')).toBeInTheDocument();
+  expect(await screen.findByLabelText('category2')).toBeInTheDocument();
+  expect(await screen.findByLabelText('category3')).toBeInTheDocument();
+});
 
-it('카테고리를 클릭 할 경우의 클릭한 카테고리가 체크된다.', async () => {});
+it('상품명을 수정하는 경우 setTitle 액션이 호출된다.', async () => {
+  const { user } = await render(<ProductFilter />);
 
-it('최소 가격 또는 최대 가격을 수정하면 setMinPrice과 setMaxPrice 액션이 호출된다.', async () => {});
+  const textInput = screen.getByLabelText('상품명');
+  await user.type(textInput, 'test');
+
+  // 최종 값 변경까지 확인하기 보다는 호출 여부를 확인한다.
+  expect(setTitleFn).toHaveBeenCalledWith('test');
+});
+
+it('카테고리를 클릭 할 경우의 클릭한 카테고리가 체크된다.', async () => {
+  const { user } = await render(<ProductFilter />);
+
+  // setCategoryId를 mocking 하지 않았기 때문에 실제로 변경되는 지 확인 가능
+  const category3 = await screen.findByLabelText('category3');
+  await user.click(category3);
+
+  expect(category3).toBeChecked();
+});
+
+it('최소 가격 또는 최대 가격을 수정하면 setMinPrice과 setMaxPrice 액션이 호출된다.', async () => {
+  const { user } = await render(<ProductFilter />);
+
+  const minPriceTextInput = screen.getByPlaceholderText('최소 금액');
+  await user.type(minPriceTextInput, '1');
+
+  expect(setMinPriceFn).toHaveBeenCalledWith('1');
+
+  const maxPriceTextInput = screen.getByPlaceholderText('최대 금액');
+  await user.type(maxPriceTextInput, '2');
+
+  expect(setMaxPriceFn).toHaveBeenCalledWith('2');
+});
