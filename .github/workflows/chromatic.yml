@@ -17,4 +17,5 @@ jobs:
         uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }} # https://www.chromatic.com/docs/github-actions/
+          # onlyChanged: 변경이 된 내용만 촬영
           onlyChanged: true # https://www.chromatic.com/docs/turbosnap/#turbosnap
