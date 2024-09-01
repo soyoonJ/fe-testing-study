@@ -2,7 +2,7 @@ import product from '@/__mocks__/response/product.json';
 import ProductCard from '@/pages/home/components/ProductCard';
 
 export default {
-  title: '홈/상품 카드',
+  title: '홈/상품 카드', // 고유 값이어야 함. title 지정하지 않을 경우 파일명으로 대체됨
   component: ProductCard,
   argTypes: {
     product: {

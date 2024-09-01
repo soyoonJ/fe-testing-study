@@ -18,7 +18,7 @@ initialize({
 const preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
-    controls: {
+    controls: { // storybook의 컨트롤 탭에서 변경 시 화면에 반영
       expanded: true,
       matchers: {
         color: /(background|color)$/i,
@@ -30,9 +30,9 @@ const preview = {
     },
   },
   decorators: [
-    withRouter,
-    mswDecorator,
-    withRHF(false),
+    withRouter, // react-router
+    mswDecorator, // msw
+    withRHF(false), // react-hook-form
     Story => (
       <QueryClientProvider client={queryClient}>
         <CssBaseline />
